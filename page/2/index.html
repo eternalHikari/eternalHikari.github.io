@@ -179,11 +179,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-浏览器时序图&amp;参考架构" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-CVE-2019-6447-ES文件浏览器" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/" class="article-date">
-  	<time datetime="2020-12-01T09:59:22.000Z" itemprop="datePublished">2020-12-01</time>
+      <a href="/2020/12/05/CVE-2019-6447-ES%E6%96%87%E4%BB%B6%E6%B5%8F%E8%A7%88%E5%99%A8/" class="article-date">
+  	<time datetime="2020-12-05T13:32:38.000Z" itemprop="datePublished">2020-12-05</time>
 </a>
     </div>
   
@@ -196,8 +196,8 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/">
-        浏览器时序图&amp;参考架构
+      <a class="article-title" href="/2020/12/05/CVE-2019-6447-ES%E6%96%87%E4%BB%B6%E6%B5%8F%E8%A7%88%E5%99%A8/">
+        CVE-2019-6447 ES文件浏览器
         
       </a>
     </h1>
@@ -208,157 +208,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>作业要求：</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201104211723313.png" alt></p>
-<hr>
-<h3 id="一、针对一款典型浏览器，绘制浏览器处理时序图"><a href="#一、针对一款典型浏览器，绘制浏览器处理时序图" class="headerlink" title="一、针对一款典型浏览器，绘制浏览器处理时序图"></a>一、针对一款典型浏览器，绘制浏览器处理时序图</h3><!--由于平时用chrome比较多，而且上课所讲的内容和web大作业都选择了chrome，故选择chrome来做第一问。-->
-
-<p>一开始没什么头绪，参考了<a href="https://blog.csdn.net/u013648063/article/details/105459517" target="_blank" rel="noopener">一位学长的博客</a>，聊了聊发现还是所里的学长hhh</p>
-<ul>
-<li>先简单梳理一下整个网页加载过程</li>
-</ul>
-<p>首先使用chrome的performance工具，我在这里访问了<a href="https://www.baidu.com/s?ie=UTF-8&amp;wd=hao123" target="_blank" rel="noopener">https://www.baidu.com/s?ie=UTF-8&amp;wd=hao123</a></p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201101820354.png" alt></p>
-<p>从点击到显示完整网页的大概时间如下</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201102402821.png" alt></p>
-<p>查看其call tree内容</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201102452439.png" alt></p>
-<p>梳理一下浏览器的渲染流程(下图出自霍老师课件)</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201103251527.png" alt></p>
-<p>渲染引擎是浏览器的核心部分，渲染引擎解析 HTML 文档，并将各标记逐个转化成 DOM 节点。同时也会解析外部 CSS 文件以及样式元素中的样式数据，完成HTML布局。Parser是入口点</p>
-<ul>
-<li><p>DOM是文档对象模型(Document Object Model)的缩写，标准由 W3C 组织指定。</p>
-<p>DOM树是把 HTML 文档呈现为带有元素、属性和文本的树结构。DOM引擎解析HTML、XML、SVG、MathML、XUL等内容。</p>
-</li>
-<li><p>Render树</p>
-<p>包含若干带有颜色、面积等可视化属性的矩形。也就是我们学前端时的各个div的布局(从左往右、从上到下)</p>
-</li>
-<li><p>CSS解释器</p>
-<p>解析CSS，为DOM中的各个元素计算样式信息。</p>
-</li>
-<li><p>脚本引擎</p>
-<p>包括JavaScript、VBScript、asm.js、WebAssembly等解释器，对脚本进行解释执行，并对DOM、CSS进行修改。</p>
-</li>
-</ul>
-<p>下图为chrome浏览器的执行流程，出自<a href="https://zhuanlan.zhihu.com/p/27628685" target="_blank" rel="noopener">认识 V8 引擎(下文也有引用)</a>，这个图更好地说明了网页从加载内容到显示需要经过的流程</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/v2-ad0a86d3faf223164a9bd22658feadc3_720w.png" alt></p>
-<h4 id="1-对用户界面进行拖拽操作"><a href="#1-对用户界面进行拖拽操作" class="headerlink" title="1. 对用户界面进行拖拽操作"></a>1. 对用户界面进行拖拽操作</h4><p>前面操作同上，下图可以看出我是拖拽窗口了(下图为gif)</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/%E6%8B%96%E6%8B%BD.gif" alt></p>
-<p>call tree显示如下：</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201110932131.png" alt></p>
-<p>从Call Tree可以看出对浏览器拖拽窗口主要有如下7个活动：</p>
-<ul>
-<li>Update Layer Tree：更新页面树</li>
-<li>Paint ：重新绘制</li>
-<li>Layout： 页面布局计算执行时触发</li>
-<li>Event：resize：发生了拉伸窗口事件</li>
-<li>Time Fired：定时器激活回调后触发</li>
-<li>Composite Layers： Chrome的渲染引擎完成图片层合并时触发</li>
-<li>Hit Test：这是跟踪指针下的对象的过程，移动屏幕上的container时会产生</li>
-</ul>
-<p>用Event Log来分析，可知拉伸窗口这个动作并没有使chrome向网络栈请求资源，涉及到的只有内核部分的渲染，具体过程即上述活动依次进行</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201113208573.png" alt></p>
-<p>用plantUML画图，代码如下。(作图地址：<a href="https://www.planttext.com/" target="_blank" rel="noopener">https://www.planttext.com/</a>)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">title Chrome Browser Timeline</span><br><span class="line"></span><br><span class="line">participant Skia order 8</span><br><span class="line">participant GDI order 7</span><br><span class="line">participant V8 order 6</span><br><span class="line">participant Blink order 5</span><br><span class="line">participant Network_Stack order 4</span><br><span class="line">participant Browser order 3</span><br><span class="line">participant UI order 2</span><br><span class="line">participant User order 1</span><br><span class="line"></span><br><span class="line">User -&gt; UI: enter url</span><br><span class="line">UI -&gt; Browser: make a request</span><br><span class="line">Browser -&gt; Blink : recalculate style</span><br><span class="line">Blink -&gt; GDI : draw fonts</span><br><span class="line">GDI --&gt; Blink:</span><br><span class="line">Blink -&gt; Skia : draw images</span><br><span class="line">Skia --&gt; Blink:</span><br><span class="line">Blink --&gt; Browser:page bitmap</span><br><span class="line">Browser --&gt; UI:display bitmap</span><br><span class="line">UI --&gt; User:</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
-
-<p>时序图如下：</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/%E6%8B%96%E6%8B%BD%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt></p>
-<h4 id="2-带有JavaScript脚本的HTML文档"><a href="#2-带有JavaScript脚本的HTML文档" class="headerlink" title="2.带有JavaScript脚本的HTML文档"></a>2.带有JavaScript脚本的HTML文档</h4><p>用到js脚本的我首先想到了电商网站，于是我打开了<a href="https://www.jd.com" target="_blank" rel="noopener">京东官网</a></p>
-<p>在Network中可以看到用到了js脚本的基本集中在前几秒</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201120456683.png" alt></p>
-<p>查看如下</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201120615119.png" alt></p>
-<p>多了一个Evaluate Script的活动，其余流程和上述基本一致。</p>
-<p>学长的博客是这么描述整个流程的，部分可见课件(果然是我太菜了，对v8的了解还是太片面)</p>
-<blockquote>
-<p>加载一个Javascript脚本的HTML流程：</p>
-<ul>
-<li>用户在UI界面输入URL</li>
-<li>UI向浏览器发起请求</li>
-<li>浏览器先去找缓存里找这个页面，如果没有，就去网络栈获取URL</li>
-<li>网络栈返回页面数据</li>
-<li>浏览器将页面数据传给blink渲染引擎拿去渲染</li>
-<li>blink分别依赖GDI、Skia绘制字体，图像</li>
-<li>blink返回给浏览器一个页面bitmap</li>
-<li>浏览器展示bitmap到UI界面上去</li>
-<li>用户观察到页面变化</li>
-</ul>
-</blockquote>
-<p>以下加一些我的补充</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201163836322.png" alt></p>
-<p>V8引擎在执行JavaScript的过程中，主要有两个阶段：编译和运行。与C++的执行前完全编译不同的是，JavaScript需要在用户使用时完成编译和执行。在V8中，JavaScript相关代码并非一下完成编译的，而是在某些代码需要执行时，才会进行编译，这就提高了响应时间，减少了时间开销。在V8引擎中，源代码先被解析器转变为抽象语法树(AST)，然后使用JIT编译器的全代码生成器从AST直接生成本地可执行代码。这个过程不同于JAVA先生成字节码或中间表示，减少了AST到字节码的转换时间，提高了代码的执行速度。但由于缺少了转换为字节码这一中间过程，也就减少了优化代码的机会。(优化可以参考<a href="https://zhuanlan.zhihu.com/p/99395691?tdsourcetag=s_pcqq_aiomsg" target="_blank" rel="noopener">JIT是如何工作的</a>)</p>
-<p>V8引擎编译本地代码时使用的主要类如下所示：</p>
-<ul>
-<li>Script：表示JavaScript代码，即包含源代码，又包含编译之后生成的本地代码，即是编译入口，又是运行入口；</li>
-<li>Compiler：编译器类，辅组Script类来编译生成代码，调用解释器(Parser)来生成AST和全代码生成器，将AST转变为本地代码；</li>
-<li>AstNode：抽象语法树节点类，是其他所有节点的基类，包含非常多的子类，后面会针对不同的子类生成不同的本地代码；</li>
-<li>AstVisitor：抽象语法树的访问者类，主要用来遍历异构的抽象语法树；</li>
-<li>FullCodeGenerator：AstVisitor类的子类，通过遍历AST来为JavaScript生成本地可执行代码。</li>
-</ul>
-<p>在V8中，函数是一个基本单位，当某个JavaScript函数被调用时，V8会查找该函数是否已经生成本地代码，如果已经生成，则直接调用该函数。否则，V8引擎会生成属于该函数的本地代码。这就节约了时间，减少了处理那些使用不到的代码的时间。其次，执行编译后的代码为JavaScript构建JS对象，这需要Runtime类来辅组创建对象，并需要从Heap类分配内存。再次，借助Runtime类中的辅组函数来完成一些功能，如属性访问等。最后，将不用的空间进行标记清除和垃圾回收。</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/v2-993bbf0a46f6feaef5f7b5005aa1aa34_720w.png" alt></p>
-<p>在V8中，TurboFan 和 Ignition 结合起来共同完成JavaScript的编译</p>
-<p>用plantUML画图，代码如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">title Chrome Browser Timeline</span><br><span class="line">User -&gt; UI: enter url</span><br><span class="line">UI -&gt; Browser: make a request</span><br><span class="line">Browser -&gt; Network_Stack:obtain a page without cache</span><br><span class="line">Network_Stack -&gt; Browser:page data</span><br><span class="line">Browser -&gt; Blink : render</span><br><span class="line">Blink -&gt; V8 :parse JavaScript scripts</span><br><span class="line">V8 --&gt; Blink :</span><br><span class="line">Blink -&gt; GDI : draw fonts</span><br><span class="line">GDI --&gt; Blink:</span><br><span class="line">Blink -&gt; Skia : draw images</span><br><span class="line">Skia --&gt; Blink:</span><br><span class="line">Blink --&gt; Browser: page bitmap</span><br><span class="line">Browser --&gt; UI: display bitmap</span><br><span class="line">UI --&gt; User:</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
-
-<p>时序图如下</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/JS%E5%8A%A0%E8%BD%BD.png" alt></p>
-<h3 id="二、Edge浏览器参考架构"><a href="#二、Edge浏览器参考架构" class="headerlink" title="二、Edge浏览器参考架构"></a>二、Edge浏览器参考架构</h3><p>同样在学长的<a href="https://blog.csdn.net/u013648063/article/details/105459477" target="_blank" rel="noopener">另一篇博客</a>可以参考思路</p>
-<p>按要求要做一个这样的参考架构(以下几个架构出自霍老师课件)</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201170157375.png" alt></p>
-<p>其中chrome、Mozilla和IE架构已给出</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201170317021.png" alt></p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201170330342.png" alt></p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201170350871.png" alt></p>
-<p>翻阅Microsoft edge的<a href="https://docs.microsoft.com/zh-cn/microsoft-edge/extensions-chromium/developer-guide/port-chrome-extension" target="_blank" rel="noopener">官方文档</a>(似乎发现了新大陆)，可知新版edge已经使用了chrome内核</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201172914177.png" alt></p>
-<p>打开电脑上的edge，用任务管理器查看进程信息(顺便看了一下chrome和firefox的信息，则不会显示这么仔细，大概是每一个标签页都作为一个完整的进程来看待)</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201171037786.png" alt></p>
-<p>其中主页是360导航(别骂了别骂了，没设置过这个浏览器555，就有时候看pdf挺舒服)，然后新建了一个标签页搜索了”hao123”</p>
-<p>查阅相关资料得知，老版本的Edge由<code>MicrosoftEdge.exe</code>和<code>MicrosoftEdgeCP.exe</code>两个进程组成，后来的版本采用UWP架构，其进程主要由<code>RuntimeBroker.exe</code>和其他进程组成。其中<code>RuntimeBroker</code>和一些核心进程为中等完整性级别，其他进程都在<code>AppContainer</code>中以低完整性级别运行。</p>
-<p><code>AppContainer</code>是windows提出的进程隔离机制。通过将应用程序与不需要的资源和其他应用程序隔离，可以最大限度地减少恶意操纵的机会。</p>
-<ul>
-<li>Browser_Broker是broker进程，负责启动C网页，同时执行类似文件保存等高特权动作，以中等完整性级别运行。</li>
-<li>Runtime Broker是以中等完整性级别运行，负责权限管理。</li>
-<li>Chakra JIT Complier是JavaScript的编译器，负责解析和执行Javascript代码。</li>
-<li>User Interface Service顾名思义是提供用户接口服务。</li>
-<li>Background Tab Tool 是标签页工具。</li>
-<li>360导航和hao123_360搜索是我打开的页面。Edge会为每一个标签页创建一个进程，是浏览器sandbox机制的体现。</li>
-<li>Microsoft Edge Mangaer是主要进程，有待进一步分析。</li>
-</ul>
-<p>其实大部分内容是还是和上述chrome的结果相似的</p>
-<p>查看MicrosoftEdgeCP.exe的dll，根据描述，推测:</p>
-<ul>
-<li>EdgeContent.dll是Edge的浏览器引擎</li>
-<li>edgehtml.dll是渲染引擎</li>
-<li>JS解释器：chakra.dll</li>
-<li>XML解释器：xmllite.dll</li>
-<li>网络相关组件包含<ul>
-<li>windows HTTP服务：winhttp.dll</li>
-<li>Win32的Internet扩展：wininet.dll</li>
-<li>Web客户端DLL：Windows.Web.dll</li>
-</ul>
-</li>
-<li>用户界面后端包含<ul>
-<li>Windows DirectUI 引擎：dui70.dll</li>
-<li>Windows Direct User Engine：duser.dll</li>
-<li>DirectX Graphics Infrastructure：dxgi.dll</li>
-</ul>
-</li>
-</ul>
-<p>结合以上信息，可以初步绘制Edge参考架构：</p>
-<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/edge%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84.png" alt></p>
-
+        
       
     </div>
     
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a></li></ul>
-	</div>
-
       
 
       
@@ -379,7 +235,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
     </nav>
   
 </div>
