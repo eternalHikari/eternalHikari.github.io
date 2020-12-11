@@ -179,10 +179,10 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-CVE-2019-6447 ES文件浏览器" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-CVE-2019-6447_ES文件浏览器" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2020/12/05/CVE-2019-6447%20ES%E6%96%87%E4%BB%B6%E6%B5%8F%E8%A7%88%E5%99%A8/" class="article-date">
+      <a href="/2020/12/05/CVE-2019-6447_ES%E6%96%87%E4%BB%B6%E6%B5%8F%E8%A7%88%E5%99%A8/" class="article-date">
   	<time datetime="2020-12-05T13:32:38.000Z" itemprop="datePublished">2020-12-05</time>
 </a>
     </div>
@@ -196,8 +196,8 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/05/CVE-2019-6447%20ES%E6%96%87%E4%BB%B6%E6%B5%8F%E8%A7%88%E5%99%A8/">
-        CVE-2019-6447 ES文件浏览器
+      <a class="article-title" href="/2020/12/05/CVE-2019-6447_ES%E6%96%87%E4%BB%B6%E6%B5%8F%E8%A7%88%E5%99%A8/">
+        CVE-2019-6447_ES文件浏览器
         
       </a>
     </h1>
@@ -225,7 +225,7 @@
 <h4 id="ES文件浏览器工作原理"><a href="#ES文件浏览器工作原理" class="headerlink" title="ES文件浏览器工作原理"></a>ES文件浏览器工作原理</h4><p><a href="https://www.zhihu.com/question/49460056" target="_blank" rel="noopener">参考链接</a></p>
 <p>基本原理：使用SMB协议和http服务器来实现</p>
 <p>SMB协议的作用是访问局域网中的共享文件<br>http服务器作用是像我们平时访问网页视频那样，可以在线实时播放局域网视频</p>
-<p>![](CVE-2019-6447 ES文件浏览器/86808fa060f42a146251e8d8b1fa2540_720w.jpg)</p>
+<p><img src="/2020/12/05/CVE-2019-6447_ES%E6%96%87%E4%BB%B6%E6%B5%8F%E8%A7%88%E5%99%A8/86808fa060f42a146251e8d8b1fa2540_720w.jpg" alt></p>
 <p>http服务器在手机里面，电脑和手机在同一个局域网内</p>
 <p>SMB协议：<a href="https://link.zhihu.com/?target=http%3A//baike.baidu.com/link%3Furl%3D2Ut4IMA5VtkMOlrYzO0bbkvlqvr3i5wIAI-f3Ep-8TGLakXJhdRwSIgI9_CBj85cq8dJTRKbInuxganiXSeqoa">SMB协议_百度百科</a><br>SMB（Server Message Block）通信协议是微软（Microsoft）和英特尔(Intel)在1987年制定的协议，主要是作为<strong>Microsoft网络的通讯协议。</strong>Windows系统就可以使用该协议进行文件传输。但是Android 不支持直接访问局域网的共享文件，所以要用到其它的开源库，来实现文件的访问</p>
 <p>SMB协议和http服务器的实现<br> jcifs 实现smb协议   <a href="https://link.zhihu.com/?target=http%3A//jcifs.samba.org/">http://jcifs.samba.org/</a><br>实现http服务器  <a href="https://link.zhihu.com/?target=https%3A//clinkc.svn.sourceforge.net/svnroot/cgupnpjava/trunk/">https://clinkc.svn.sourceforge.net/svnroot/cgupnpjava/trunk/</a><br>（或者用apache来实现http服务器 ）<a href="https://link.zhihu.com/?target=http%3A//commons.apache.org/proper/commons-net/">Apache Commons Net</a></p>
