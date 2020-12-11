@@ -179,11 +179,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-浏览器Fuzz" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-浏览器时序图&amp;参考架构" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/" class="article-date">
-  	<time datetime="2020-11-20T06:27:26.000Z" itemprop="datePublished">2020-11-20</time>
+      <a href="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/" class="article-date">
+  	<time datetime="2020-12-01T09:59:22.000Z" itemprop="datePublished">2020-12-01</time>
 </a>
     </div>
   
@@ -196,8 +196,8 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/">
-        浏览器Fuzz
+      <a class="article-title" href="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/">
+        浏览器时序图&amp;参考架构
         
       </a>
     </h1>
@@ -208,186 +208,146 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="浏览器fuzz"><a href="#浏览器fuzz" class="headerlink" title="浏览器fuzz"></a>浏览器fuzz</h2><h3 id="一、浏览器部分"><a href="#一、浏览器部分" class="headerlink" title="一、浏览器部分"></a>一、浏览器部分</h3><h4 id="1-1-浏览器结构"><a href="#1-1-浏览器结构" class="headerlink" title="1.1 浏览器结构"></a>1.1 浏览器结构</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201106154532115.png" alt></p>
-<p>浏览器一般包括DOM引擎、CSS解释器、脚本引擎、渲染引擎、协议支持、媒体流支持、三方库、数据存储、用户界面等几个部分。</p>
+        <p>作业要求：</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201104211723313.png" alt></p>
+<hr>
+<h3 id="一、针对一款典型浏览器，绘制浏览器处理时序图"><a href="#一、针对一款典型浏览器，绘制浏览器处理时序图" class="headerlink" title="一、针对一款典型浏览器，绘制浏览器处理时序图"></a>一、针对一款典型浏览器，绘制浏览器处理时序图</h3><!--由于平时用chrome比较多，而且上课所讲的内容和web大作业都选择了chrome，故选择chrome来做第一问。-->
+
+<p>一开始没什么头绪，参考了<a href="https://blog.csdn.net/u013648063/article/details/105459517" target="_blank" rel="noopener">一位学长的博客</a>，聊了聊发现还是所里的学长hhh</p>
 <ul>
-<li><p>用户界面</p>
-<p>与用户交互、接受用户操作、展现浏览器当前状态。包括地址栏、前进/后退按钮、书签菜单等。</p>
-</li>
-<li><p>浏览器引擎</p>
-<p>是一个可嵌入的组件，提供了查询和操作渲染引擎的高层接口(加载、刷新、后退、错误信息等)，使渲染引擎平台无关， 提高可移植性</p>
-</li>
-<li><p>渲染引擎</p>
-<p>浏览器的核心部分。解析HTML文档和CSS描述；依据CSS，完成HTML布局。渲染引擎根据元素与样式信息，计算大小、位置、布局，渲染解析后的内容。</p>
-</li>
-<li><p>网络</p>
-<p>提供网络相关的功能，如协议解析、网络I/O等。浏览器支持的协议通常包括HTTP、FTP、WebSocket、HTTP/2、QUIC、DNS、mDNS、WebRTC等。浏览器支持的媒体流通常包括JPG、GIF、PNG、WebM、Ogg、AAC、MP3、MP4、FLAC等。</p>
-</li>
-<li><p>JavaScript解释器</p>
-<p>解析并执行JavaScript代码，结果返回给渲染引擎</p>
-</li>
-<li><p>XML解析器</p>
-<p>解析XML文档</p>
-</li>
-<li><p>用户界面后端</p>
-<p>提供绘制、窗口原语和字体等</p>
-</li>
-<li><p>数据存储</p>
-<p>存储书签、Cookie、 缓存等各种数据到硬盘上</p>
-</li>
+<li>先简单梳理一下整个网页加载过程</li>
 </ul>
-<h4 id="1-2-渲染引擎"><a href="#1-2-渲染引擎" class="headerlink" title="1.2 渲染引擎"></a>1.2 渲染引擎</h4><p><strong>这是浏览器的核心部分，渲染引擎解析 HTML 文档，并将各标记逐个转化成 DOM 节点。同时也会解析外部 CSS 文件以及样式元素中的样式数据，完成HTML布局。</strong></p>
+<p>首先使用chrome的performance工具，我在这里访问了<a href="https://www.baidu.com/s?ie=UTF-8&amp;wd=hao123" target="_blank" rel="noopener">https://www.baidu.com/s?ie=UTF-8&amp;wd=hao123</a></p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201101820354.png" alt></p>
+<p>从点击到显示完整网页的大概时间如下</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201102402821.png" alt></p>
+<p>查看其call tree内容</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201102452439.png" alt></p>
+<p>梳理一下浏览器的渲染流程(下图出自霍老师课件)</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201103251527.png" alt></p>
+<p>渲染引擎是浏览器的核心部分，渲染引擎解析 HTML 文档，并将各标记逐个转化成 DOM 节点。同时也会解析外部 CSS 文件以及样式元素中的样式数据，完成HTML布局。Parser是入口点</p>
 <ul>
-<li><p>CSS解释器</p>
-<p>解析CSS，为DOM中的各个元素计算样式信息。</p>
-</li>
-<li><p>脚本引擎</p>
-<p>包括JavaScript、VBScript、asm.js、WebAssembly等解释器，对脚本进行解释执行，并对DOM、CSS进行修改。</p>
-</li>
 <li><p>DOM是文档对象模型(Document Object Model)的缩写，标准由 W3C 组织指定。</p>
 <p>DOM树是把 HTML 文档呈现为带有元素、属性和文本的树结构。DOM引擎解析HTML、XML、SVG、MathML、XUL等内容。</p>
 </li>
 <li><p>Render树</p>
 <p>包含若干带有颜色、面积等可视化属性的矩形。也就是我们学前端时的各个div的布局(从左往右、从上到下)</p>
 </li>
-</ul>
-<p><strong>渲染过程</strong></p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120114715656.png" alt></p>
-<p><strong>DOM树fuzz的流程图</strong></p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120123419951.png" alt></p>
-<h4 id="1-3-JS引擎"><a href="#1-3-JS引擎" class="headerlink" title="1.3 JS引擎"></a>1.3 JS引擎</h4><p>JavaScript引擎是一个专门处理JavaScript脚本的虚拟机，一般会附带在网页浏览器之中。</p>
-<p><strong>JS引擎分类</strong></p>
-<ul>
-<li>V8 (Chrome)</li>
-<li>SpiderMonkey (FireFox)</li>
-<li>ChakraCore (Edge)</li>
-<li>JavaScriptCore (Safari)</li>
-</ul>
-<p><strong>执行流程</strong></p>
-<ul>
-<li>JavaScript源代码被Parser解析成AST</li>
-<li>AST经Interpreter解析成Bytecode后执行</li>
-<li>不断执行Bytecode，收集运行时信息，生成优化后的Bytecode</li>
-</ul>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120123536971.png" alt></p>
-<p><strong>对上图的解释</strong></p>
-<ul>
-<li>Parser:脚本执行的入口点，通常发出自定义bytecode</li>
-<li>Bytecode然后由解释器或JIT编译器解释编译</li>
-<li>执行代码与运行时交互，运行时定义各种数据结构的表示，提供内建函数和对象等等</li>
-<li>回收内存所需的垃圾收集器</li>
-</ul>
-<p>JIT编译器的流程</p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120133428453.png" alt></p>
-<p>JS是脚本语言，每次执行前会先编译再执行。当系统识别这一块代码经常出现时，就定义为hot code，直接运行编译好的二进制代码。</p>
-<p>具体可以参考<a href="https://zhuanlan.zhihu.com/p/99395691?tdsourcetag=s_pcqq_aiomsg" target="_blank" rel="noopener">JavaScript 编译 - JIT (just-in-time) compiler 是怎么工作的</a></p>
-<p><strong>下图为parser先生成抽象语法树(AST)，再由全代码生成汇编语言，箭头指向调用runtime</strong></p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120123952322.png" alt></p>
-<h4 id="1-4-WebAssembly"><a href="#1-4-WebAssembly" class="headerlink" title="1.4 WebAssembly"></a>1.4 WebAssembly</h4><p>WebAssembly是在Web中引入的低级语言，其目的和Asm.js类似，也是要支持本地代码的运行从而获得媲美原生应用的高性能。</p>
-<p>它是一种二进制语言，但是无法直接在处理器上运行。在运行时，代码被编译为中间字节代码，可以在浏览器内快速转换为机器代码，然后比传统JavaScript更有效地执行。</p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120124235569.png" alt></p>
-<p>Wasm的设计从如下几个方面考虑来保证Wasm的安全性</p>
-<ul>
-<li>保护用户免受由于无意的错误而导致漏洞的应用程序的侵害</li>
-<li>保护用户免受故意编写为恶意的应用程序的侵害</li>
-<li>为开发人员提供良好的缓解措施</li>
-</ul>
-<p>具体的安全措施有</p>
-<ul>
-<li>Wasm应用程序在沙箱内运行</li>
-<li>Wasm无法对任意地址进行函数调用。Wasm采用对函数进行编号的方式，编号存储在函数表中</li>
-<li>间接函数调用受类型签名检查的约束</li>
-<li>调用堆栈受到保护，这意味着无法覆盖返回指针</li>
-<li>实现了控制流完整性，这意味着调用意外的函数将失败</li>
-</ul>
-<h3 id="二、Fuzz部分"><a href="#二、Fuzz部分" class="headerlink" title="二、Fuzz部分"></a>二、Fuzz部分</h3><p>Fuzz又称模糊测试，是一种侧重于发现软件安全漏洞的方法。</p>
-<p>Fuzz是通过构造非预期的输入数据并监控目标软件在运行过程中的异常结果来发现软件故障。</p>
-<h4 id="2-1-核心功能"><a href="#2-1-核心功能" class="headerlink" title="2.1 核心功能"></a>2.1 核心功能</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201112202145078.png" alt></p>
-<h4 id="2-2-基本流程"><a href="#2-2-基本流程" class="headerlink" title="2.2 基本流程"></a>2.2 基本流程</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201112202215878.png" alt></p>
-<h4 id="2-3-fuzz分类"><a href="#2-3-fuzz分类" class="headerlink" title="2.3 fuzz分类"></a>2.3 fuzz分类</h4><p>根据fuzz对象可以分为</p>
-<ul>
-<li><p>白盒模糊测试</p>
+<li><p>CSS解释器</p>
+<p>解析CSS，为DOM中的各个元素计算样式信息。</p>
 </li>
-<li><p>黑盒模糊测试</p>
-</li>
-<li><p>灰盒模糊测试</p>
+<li><p>脚本引擎</p>
+<p>包括JavaScript、VBScript、asm.js、WebAssembly等解释器，对脚本进行解释执行，并对DOM、CSS进行修改。</p>
 </li>
 </ul>
-<p>根据模糊测试的研究类型可分为</p>
+<p>下图为chrome浏览器的执行流程，出自<a href="https://zhuanlan.zhihu.com/p/27628685" target="_blank" rel="noopener">认识 V8 引擎(下文也有引用)</a>，这个图更好地说明了网页从加载内容到显示需要经过的流程</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/v2-ad0a86d3faf223164a9bd22658feadc3_720w.png" alt></p>
+<h4 id="1-对用户界面进行拖拽操作"><a href="#1-对用户界面进行拖拽操作" class="headerlink" title="1. 对用户界面进行拖拽操作"></a>1. 对用户界面进行拖拽操作</h4><p>前面操作同上，下图可以看出我是拖拽窗口了(下图为gif)</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/%E6%8B%96%E6%8B%BD.gif" alt></p>
+<p>call tree显示如下：</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201110932131.png" alt></p>
+<p>从Call Tree可以看出对浏览器拖拽窗口主要有如下7个活动：</p>
 <ul>
-<li>基于变异的fuzz</li>
-<li>基于生成的fuzz</li>
+<li>Update Layer Tree：更新页面树</li>
+<li>Paint ：重新绘制</li>
+<li>Layout： 页面布局计算执行时触发</li>
+<li>Event：resize：发生了拉伸窗口事件</li>
+<li>Time Fired：定时器激活回调后触发</li>
+<li>Composite Layers： Chrome的渲染引擎完成图片层合并时触发</li>
+<li>Hit Test：这是跟踪指针下的对象的过程，移动屏幕上的container时会产生</li>
 </ul>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120130629044.png" alt></p>
-<h3 id="三、浏览器fuzz"><a href="#三、浏览器fuzz" class="headerlink" title="三、浏览器fuzz"></a>三、浏览器fuzz</h3><h4 id="3-1-如何进行浏览器fuzz-我们需要关心什么"><a href="#3-1-如何进行浏览器fuzz-我们需要关心什么" class="headerlink" title="3.1 如何进行浏览器fuzz(我们需要关心什么)"></a>3.1 如何进行浏览器fuzz(我们需要关心什么)</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120130821904.png" alt></p>
-<p><strong>主要关心的问题</strong>：如何输入、如何有效输入、可fuzz的地方有哪些</p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120131021057.png" alt></p>
-<p>以一个例子为例，可知一个通用的方法：</p>
-<ul>
-<li>通过调用接口获取信息</li>
-<li>由参数类型构造数据</li>
-<li>使用监视器监视</li>
-</ul>
-<p>如何构造是个问题</p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120131755791.png" alt></p>
-<p>这部分与上述提到的JIT编译器有关。既可以输入js源代码，也可以输入bytecode</p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120131814384.png" alt></p>
-<p>在fuzz中，测试集是很重要的。因为后续的变异是基于初试testcase变异的。</p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120135609995.png" alt></p>
-<p>这里补充一下fuzz常见的基于的规格：<a href="https://www.freebuf.com/articles/system/197678.html" target="_blank" rel="noopener">可以戳这里看第五大点</a></p>
-<ul>
-<li>基于块</li>
-</ul>
-<p>将程序拖入ida会分成一块一块的代码，这些代码会从上到下依次执行，当遇到转移/跳转指令之后到下一个代码块</p>
-<ul>
-<li>基于边</li>
-</ul>
-<p>代码块与块之间的跳转</p>
-<ul>
-<li>基于元组</li>
-</ul>
-<p>基于两个块和中间的边，可以记录前后块的信息，包含一定的前后文的情况</p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120135812935.png" alt></p>
-<p>基于文法同样可以获得很多满足结构的语法片段。例如1+2+3可以分为(1+2)+3和1+(2+3)，抽象语法树一般有多个满足语法条件的形式。这种方式同样可以生成规模很大的测试集</p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120142001479.png" alt></p>
-<h4 id="3-2-对浏览器fuzz的分类"><a href="#3-2-对浏览器fuzz的分类" class="headerlink" title="3.2 对浏览器fuzz的分类"></a>3.2 对浏览器fuzz的分类</h4><h5 id="3-2-1-按功能分"><a href="#3-2-1-按功能分" class="headerlink" title="3.2.1 按功能分"></a>3.2.1 按功能分</h5><p>在浏览器中，Fuzz框架要实现的主要功能是随机样本的生成、浏览器进程监控、Crash样本保存。而各个框架则在完成基本功能的基础上实现分布式调度、自定义fuzz策略、样本精简、分析crash等特性。</p>
-<p>如果要分类的话，浏览器fuzz工具大概可以分为框架类、策略类以及综合类。策略类工具制定了一系列新建、修改、删除DOM元素的规则。通过生成随机样本的方式，产生不同的样本来测试浏览器是否产生异常。而框架类工具则是提供了启动并监控浏览器进程、打开或记录异常样本等功能，将策略类工具承载起来的Fuzzing平台。</p>
-<ul>
-<li><p>框架类比较有代表性的是BFuzzer、grinder、cross_fuzz、x-fuzzer等，这类工具提供了fuzz的基本功能，但是没有涉及样本生成的策略。</p>
-</li>
-<li><p>策略类工具中比较有代表性的是nduja和fileja[3-5]，这两个工具是由Valotta完成的浏览器fuzz样本生成脚本，有着比较丰富的生成规则，但是并没有实现自动化的测试等功能。</p>
-</li>
-<li><p>综合类则综合了两类的特点，完成了两种功能，比较有代表性的是clusterfuzz、funfuzz、chromefuzzer、ajaxdemolisher、lithium等。</p>
-</li>
-</ul>
-<p>这些工具基本都通过javascript脚本进行fuzz操作，同时通过hook函数、localStorage本地存储等技术手段动态记录fuzz操作日志，捕获到异常后再根据记录日志进行还原。</p>
-<h5 id="3-2-2-按攻击面分类"><a href="#3-2-2-按攻击面分类" class="headerlink" title="3.2.2 按攻击面分类"></a>3.2.2 按攻击面分类</h5><p>另外一种分类的思路是按攻击面分类，常见的fuzzer都是针对DOM进行fuzz，但是也有一些fuzz工具专注于其他的攻击面。比如针对ActiveX进行fuzz的axman，另外也有一些针对JavaScript脚本、CSS、PDF、SVG、Flash、浏览器扩展、插件等进行fuzz的工具。</p>
-<h5 id="3-2-3-随机样本的生成"><a href="#3-2-3-随机样本的生成" class="headerlink" title="3.2.3 随机样本的生成"></a>3.2.3 随机样本的生成</h5><p>随机样本生成的好坏，直接决定了该工具能否挖掘出有价值的漏洞。目前纯Fuzz方法中，比较流行的就是<strong>根据目标文件格式生成</strong>针对性样本，效果也比较理想。以HTML文档为例，诞生过很多随机生成HTML/DOM元素的Browser Fuzzer。</p>
-<p>曾经盛名一时的nduja，其大致思路就是，利用JavaScript随机创建DOM元素、随机调用DOM处理函数、随机删除DOM元素等操作来完成每一次Fuzz的。</p>
-<h4 id="3-3-样本保存"><a href="#3-3-样本保存" class="headerlink" title="3.3 样本保存"></a>3.3 样本保存</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120141743643.png" alt></p>
-<p>附上一张从bytecode到插桩的流程图</p>
-<h5 id="3-3-1-记录随机数"><a href="#3-3-1-记录随机数" class="headerlink" title="3.3.1 记录随机数"></a>3.3.1 记录随机数</h5><p>结合之前提到的创建DOM元素的方式，一种思路是将本次rand函数生成的所有随机数全部保存下来即可。Grinder框架就是基于这种思路，采用DLL注入的方式，劫持了JavaScript的parseFloat函数，用以记录某次样本需要记录的相关参数。</p>
-<p>但是这样有几个缺点，一个是浏览器最新版本一般不提供symbols文件或发布symbols文件比较慢，这无疑限制了Grinder对最新浏览器的测试能力。另外一个是有时候可能是多个HTML共同导致了某个Crash，但是Grinder的日志只记录了一个HTML中的log信息，可能无法重现该类漏洞。</p>
-<h5 id="3-3-2-记录随机样本"><a href="#3-3-2-记录随机样本" class="headerlink" title="3.3.2 记录随机样本"></a>3.3.2 记录随机样本</h5><p>既然记录随机值的方式存在一定的问题，那么就有了另一个思路，直接将模版中的随机元素生成后进行保存，然后浏览器再访问。这样就简化了从日志中恢复样本的流程，而且更为准确。</p>
-<h5 id="3-3-3-WebSocket通信"><a href="#3-3-3-WebSocket通信" class="headerlink" title="3.3.3 WebSocket通信"></a>3.3.3 WebSocket通信</h5><p>另一个方法是利用websocket，实时的把相关信息发送到服务器，在服务器端进行保存。但是这样也有一个缺点，运行的websocket相关脚本可能也会影响浏览器样本的fuzz情况。</p>
-<h5 id="3-4-4-其他样本生成方式"><a href="#3-4-4-其他样本生成方式" class="headerlink" title="3.4.4 其他样本生成方式"></a>3.4.4 其他样本生成方式</h5><p>另外一种方式是根据已有的HTML样本进行变换之后生成。 样本可以来源于之前的0day，从网上获取的一些样本。 样本构造尽可能多的覆盖HTML的属性，比如css/javascript等</p>
-<h4 id="3-4-浏览器进程监控"><a href="#3-4-浏览器进程监控" class="headerlink" title="3.4 浏览器进程监控"></a>3.4 浏览器进程监控</h4><p>在对浏览器的异常检测上，通常有Pydbg和Windbg等方式，这些方式都各有优劣。但pydbg对python3和x64系统软件支持都不是特别好，另外windbg具有很吸引人的!exploitable插件[2-7]，虽然某些时候给出的结论并不准确，但不失为一种对漏洞可利用性做出预判的方法。</p>
-<p>另一个方法是，在Windows下某个进程崩溃时，通常会弹出WerFault.exe异常提示,可以根据进程列表中有无WerFault.exe作为监控浏览器是否发生Crash的依据。另外，将Windbg的命令行版cdb.exe设置为默认即时调试器。当发生crash时自动调用该调试器，并做下记录，也是一个可行的方法。</p>
-<h4 id="3-5-浏览器fuzz缺点"><a href="#3-5-浏览器fuzz缺点" class="headerlink" title="3.5 浏览器fuzz缺点"></a>3.5 浏览器fuzz缺点</h4><p>很多浏览器fuzz工具每运行一个测试用例都会重启待测浏览器进程，因为浏览器重启在运行一个测试用例过程中耗时占比较大，进而导致fuzz效率不高。</p>
-<h4 id="3-6-别的思考"><a href="#3-6-别的思考" class="headerlink" title="3.6 别的思考"></a>3.6 别的思考</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120141854144.png" alt></p>
-<p>这里需要说一下JS竟用条件<br><strong>所有现代浏览器都使用一条OS线程来实现JS脚本引擎。</strong><br>唯一的例外是web workers,但它不会访问DOM，相对安全风险较小。</p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120142145127.png" alt></p>
-<p>由于大部分事件是异步处理的，所以很有可能同一事件内不同部件的内存内容不同，这极易引发安全问题。</p>
-<p>附上V8编译概览</p>
-<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120142332917.png" alt></p>
+<p>用Event Log来分析，可知拉伸窗口这个动作并没有使chrome向网络栈请求资源，涉及到的只有内核部分的渲染，具体过程即上述活动依次进行</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201113208573.png" alt></p>
+<p>用plantUML画图，代码如下。(作图地址：<a href="https://www.planttext.com/" target="_blank" rel="noopener">https://www.planttext.com/</a>)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">title Chrome Browser Timeline</span><br><span class="line"></span><br><span class="line">participant Skia order 8</span><br><span class="line">participant GDI order 7</span><br><span class="line">participant V8 order 6</span><br><span class="line">participant Blink order 5</span><br><span class="line">participant Network_Stack order 4</span><br><span class="line">participant Browser order 3</span><br><span class="line">participant UI order 2</span><br><span class="line">participant User order 1</span><br><span class="line"></span><br><span class="line">User -&gt; UI: enter url</span><br><span class="line">UI -&gt; Browser: make a request</span><br><span class="line">Browser -&gt; Blink : recalculate style</span><br><span class="line">Blink -&gt; GDI : draw fonts</span><br><span class="line">GDI --&gt; Blink:</span><br><span class="line">Blink -&gt; Skia : draw images</span><br><span class="line">Skia --&gt; Blink:</span><br><span class="line">Blink --&gt; Browser:page bitmap</span><br><span class="line">Browser --&gt; UI:display bitmap</span><br><span class="line">UI --&gt; User:</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+
+<p>时序图如下：</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/%E6%8B%96%E6%8B%BD%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt></p>
+<h4 id="2-带有JavaScript脚本的HTML文档"><a href="#2-带有JavaScript脚本的HTML文档" class="headerlink" title="2.带有JavaScript脚本的HTML文档"></a>2.带有JavaScript脚本的HTML文档</h4><p>用到js脚本的我首先想到了电商网站，于是我打开了<a href="https://www.jd.com" target="_blank" rel="noopener">京东官网</a></p>
+<p>在Network中可以看到用到了js脚本的基本集中在前几秒</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201120456683.png" alt></p>
+<p>查看如下</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201120615119.png" alt></p>
+<p>多了一个Evaluate Script的活动，其余流程和上述基本一致。</p>
+<p>学长的博客是这么描述整个流程的，部分可见课件(果然是我太菜了，对v8的了解还是太片面)</p>
 <blockquote>
-<p>这篇文章是我在web安全大作业的一部分，刘老师真的很赞</p>
-<p>文中截取了一些霍玮老师、刘奇旭老师课件上的图片(说明俺听了2333</p>
-<p>文章也引用了很多交大大佬<a href="https://github.com/LyleMi/Browser-Fuzz-Summarize" target="_blank" rel="noopener">LyleMi</a>已经总结好的内容，了解到了许多细节</p>
-<p>感谢队友，尤其是plusls，orz</p>
-<p>在整理过程中，我看了很多相关论文和v8的资料，每一个地方都有太多要学的地方了。v8的内容之后估计还会写到，本文以能解释清楚浏览器fuzz的目的来写，所以v8的部分不是很清楚，以后会结合着真实案例来写。</p>
-<p>如果有什么问题，师傅可以点击[联系我](<a href="mailto:yagami1230@outlook.com">Email</a>)发邮件</p>
+<p>加载一个Javascript脚本的HTML流程：</p>
+<ul>
+<li>用户在UI界面输入URL</li>
+<li>UI向浏览器发起请求</li>
+<li>浏览器先去找缓存里找这个页面，如果没有，就去网络栈获取URL</li>
+<li>网络栈返回页面数据</li>
+<li>浏览器将页面数据传给blink渲染引擎拿去渲染</li>
+<li>blink分别依赖GDI、Skia绘制字体，图像</li>
+<li>blink返回给浏览器一个页面bitmap</li>
+<li>浏览器展示bitmap到UI界面上去</li>
+<li>用户观察到页面变化</li>
+</ul>
 </blockquote>
+<p>以下加一些我的补充</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201163836322.png" alt></p>
+<p>V8引擎在执行JavaScript的过程中，主要有两个阶段：编译和运行。与C++的执行前完全编译不同的是，JavaScript需要在用户使用时完成编译和执行。在V8中，JavaScript相关代码并非一下完成编译的，而是在某些代码需要执行时，才会进行编译，这就提高了响应时间，减少了时间开销。在V8引擎中，源代码先被解析器转变为抽象语法树(AST)，然后使用JIT编译器的全代码生成器从AST直接生成本地可执行代码。这个过程不同于JAVA先生成字节码或中间表示，减少了AST到字节码的转换时间，提高了代码的执行速度。但由于缺少了转换为字节码这一中间过程，也就减少了优化代码的机会。(优化可以参考<a href="https://zhuanlan.zhihu.com/p/99395691?tdsourcetag=s_pcqq_aiomsg" target="_blank" rel="noopener">JIT是如何工作的</a>)</p>
+<p>V8引擎编译本地代码时使用的主要类如下所示：</p>
+<ul>
+<li>Script：表示JavaScript代码，即包含源代码，又包含编译之后生成的本地代码，即是编译入口，又是运行入口；</li>
+<li>Compiler：编译器类，辅组Script类来编译生成代码，调用解释器(Parser)来生成AST和全代码生成器，将AST转变为本地代码；</li>
+<li>AstNode：抽象语法树节点类，是其他所有节点的基类，包含非常多的子类，后面会针对不同的子类生成不同的本地代码；</li>
+<li>AstVisitor：抽象语法树的访问者类，主要用来遍历异构的抽象语法树；</li>
+<li>FullCodeGenerator：AstVisitor类的子类，通过遍历AST来为JavaScript生成本地可执行代码。</li>
+</ul>
+<p>在V8中，函数是一个基本单位，当某个JavaScript函数被调用时，V8会查找该函数是否已经生成本地代码，如果已经生成，则直接调用该函数。否则，V8引擎会生成属于该函数的本地代码。这就节约了时间，减少了处理那些使用不到的代码的时间。其次，执行编译后的代码为JavaScript构建JS对象，这需要Runtime类来辅组创建对象，并需要从Heap类分配内存。再次，借助Runtime类中的辅组函数来完成一些功能，如属性访问等。最后，将不用的空间进行标记清除和垃圾回收。</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/v2-993bbf0a46f6feaef5f7b5005aa1aa34_720w.png" alt></p>
+<p>在V8中，TurboFan 和 Ignition 结合起来共同完成JavaScript的编译</p>
+<p>用plantUML画图，代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">title Chrome Browser Timeline</span><br><span class="line">User -&gt; UI: enter url</span><br><span class="line">UI -&gt; Browser: make a request</span><br><span class="line">Browser -&gt; Network_Stack:obtain a page without cache</span><br><span class="line">Network_Stack -&gt; Browser:page data</span><br><span class="line">Browser -&gt; Blink : render</span><br><span class="line">Blink -&gt; V8 :parse JavaScript scripts</span><br><span class="line">V8 --&gt; Blink :</span><br><span class="line">Blink -&gt; GDI : draw fonts</span><br><span class="line">GDI --&gt; Blink:</span><br><span class="line">Blink -&gt; Skia : draw images</span><br><span class="line">Skia --&gt; Blink:</span><br><span class="line">Blink --&gt; Browser: page bitmap</span><br><span class="line">Browser --&gt; UI: display bitmap</span><br><span class="line">UI --&gt; User:</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+
+<p>时序图如下</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/JS%E5%8A%A0%E8%BD%BD.png" alt></p>
+<h3 id="二、Edge浏览器参考架构"><a href="#二、Edge浏览器参考架构" class="headerlink" title="二、Edge浏览器参考架构"></a>二、Edge浏览器参考架构</h3><p>同样在学长的<a href="https://blog.csdn.net/u013648063/article/details/105459477" target="_blank" rel="noopener">另一篇博客</a>可以参考思路</p>
+<p>按要求要做一个这样的参考架构(以下几个架构出自霍老师课件)</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201170157375.png" alt></p>
+<p>其中chrome、Mozilla和IE架构已给出</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201170317021.png" alt></p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201170330342.png" alt></p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201170350871.png" alt></p>
+<p>翻阅Microsoft edge的<a href="https://docs.microsoft.com/zh-cn/microsoft-edge/extensions-chromium/developer-guide/port-chrome-extension" target="_blank" rel="noopener">官方文档</a>(似乎发现了新大陆)，可知新版edge已经使用了chrome内核</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201172914177.png" alt></p>
+<p>打开电脑上的edge，用任务管理器查看进程信息(顺便看了一下chrome和firefox的信息，则不会显示这么仔细，大概是每一个标签页都作为一个完整的进程来看待)</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/image-20201201171037786.png" alt></p>
+<p>其中主页是360导航(别骂了别骂了，没设置过这个浏览器555，就有时候看pdf挺舒服)，然后新建了一个标签页搜索了”hao123”</p>
+<p>查阅相关资料得知，老版本的Edge由<code>MicrosoftEdge.exe</code>和<code>MicrosoftEdgeCP.exe</code>两个进程组成，后来的版本采用UWP架构，其进程主要由<code>RuntimeBroker.exe</code>和其他进程组成。其中<code>RuntimeBroker</code>和一些核心进程为中等完整性级别，其他进程都在<code>AppContainer</code>中以低完整性级别运行。</p>
+<p><code>AppContainer</code>是windows提出的进程隔离机制。通过将应用程序与不需要的资源和其他应用程序隔离，可以最大限度地减少恶意操纵的机会。</p>
+<ul>
+<li>Browser_Broker是broker进程，负责启动C网页，同时执行类似文件保存等高特权动作，以中等完整性级别运行。</li>
+<li>Runtime Broker是以中等完整性级别运行，负责权限管理。</li>
+<li>Chakra JIT Complier是JavaScript的编译器，负责解析和执行Javascript代码。</li>
+<li>User Interface Service顾名思义是提供用户接口服务。</li>
+<li>Background Tab Tool 是标签页工具。</li>
+<li>360导航和hao123_360搜索是我打开的页面。Edge会为每一个标签页创建一个进程，是浏览器sandbox机制的体现。</li>
+<li>Microsoft Edge Mangaer是主要进程，有待进一步分析。</li>
+</ul>
+<p>其实大部分内容是还是和上述chrome的结果相似的</p>
+<p>查看MicrosoftEdgeCP.exe的dll，根据描述，推测:</p>
+<ul>
+<li>EdgeContent.dll是Edge的浏览器引擎</li>
+<li>edgehtml.dll是渲染引擎</li>
+<li>JS解释器：chakra.dll</li>
+<li>XML解释器：xmllite.dll</li>
+<li>网络相关组件包含<ul>
+<li>windows HTTP服务：winhttp.dll</li>
+<li>Win32的Internet扩展：wininet.dll</li>
+<li>Web客户端DLL：Windows.Web.dll</li>
+</ul>
+</li>
+<li>用户界面后端包含<ul>
+<li>Windows DirectUI 引擎：dui70.dll</li>
+<li>Windows Direct User Engine：duser.dll</li>
+<li>DirectX Graphics Infrastructure：dxgi.dll</li>
+</ul>
+</li>
+</ul>
+<p>结合以上信息，可以初步绘制Edge参考架构：</p>
+<p><img src="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/edge%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84.png" alt></p>
 
       
     </div>
@@ -396,7 +356,7 @@
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Fuzz/" rel="tag">Fuzz</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chrome/" rel="tag">chrome</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a></li></ul>
 	</div>
 
       
@@ -419,7 +379,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/4/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/4/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/">Next &amp;raquo;</a>
     </nav>
   
 </div>

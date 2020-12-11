@@ -179,11 +179,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-AFL的入门学习" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2020/01/05/hello-world/" class="article-date">
-  	<time datetime="2020-01-05T05:24:57.101Z" itemprop="datePublished">2020-01-05</time>
+      <a href="/2020/01/08/AFL%E7%9A%84%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/" class="article-date">
+  	<time datetime="2020-01-07T18:43:27.000Z" itemprop="datePublished">2020-01-08</time>
 </a>
     </div>
   
@@ -196,8 +196,8 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/05/hello-world/">
-        Hello World
+      <a class="article-title" href="/2020/01/08/AFL%E7%9A%84%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/">
+        AFL的入门学习
         
       </a>
     </h1>
@@ -208,19 +208,95 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+        <h4 id="先贴上我参考的教程"><a href="#先贴上我参考的教程" class="headerlink" title="先贴上我参考的教程"></a>先贴上我参考的教程</h4><ul>
+<li><a href="https://www.freebuf.com/articles/system/191543.html" target="_blank" rel="noopener">freebuf1</a>、<a href="https://www.freebuf.com/articles/system/197678.html" target="_blank" rel="noopener">freebuf2</a></li>
+<li><a href="https://xz.aliyun.com/t/4314#toc-10" target="_blank" rel="noopener">先知社区</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>实验环境</p>
+<p>ubuntu 16.04(虚拟机) 内存分配4gb</p>
+<p>afl 2.52b</p>
+</blockquote>
+<h4 id="AFL是什么"><a href="#AFL是什么" class="headerlink" title="AFL是什么"></a>AFL是什么</h4><p>AFL（American Fuzzy Lop）是由安全研究员Michał Zalewski开发的一款基于覆盖引导（Coverage-guided）的模糊测试工具，它通过记录输入样本的代码覆盖率，从而调整输入样本以提高覆盖率，增加发现漏洞的概率。</p>
+<p>我们可以在<a href="https://lcamtuf.coredump.cx/afl/" target="_blank" rel="noopener">官方网站</a>发现更多有用信息</p>
+<h4 id="AFL的工作流程"><a href="#AFL的工作流程" class="headerlink" title="AFL的工作流程"></a>AFL的工作流程</h4><p><img src="https://img-blog.csdnimg.cn/20200423115056946.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_SGlrYXJp,size_16,color_FFFFFF,t_70" alt="afl1"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">①从源码编译程序时进行插桩，以记录代码覆盖率（Code Coverage）；</span><br><span class="line"></span><br><span class="line">②选择一些输入文件，作为初始测试集加入输入队列（queue）；</span><br><span class="line"></span><br><span class="line">③将队列中的文件按一定的策略进行“突变”；</span><br><span class="line"></span><br><span class="line">④如果经过变异文件更新了覆盖范围，则将其保留添加到队列中;</span><br><span class="line"></span><br><span class="line">⑤上述过程会一直循环进行，期间触发了crash的文件会被记录下来。</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200425113439275.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_SGlrYXJp,size_16,color_FFFFFF,t_70" alt="AFL流程freebuf"></p>
+<h4 id="下载AFL"><a href="#下载AFL" class="headerlink" title="下载AFL"></a>下载AFL</h4><p><a href="https://www.cnblogs.com/wayne-tao/p/11739420.html" target="_blank" rel="noopener">下载指引</a></p>
+<ul>
+<li>安装<code>make</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+<a href>gcc、make、cmake的区别</a></li>
+</ul>
+<h4 id="用afl-gcc编译源程序"><a href="#用afl-gcc编译源程序" class="headerlink" title="用afl-gcc编译源程序"></a>用afl-gcc编译源程序</h4><ul>
+<li>先写一个简单的c程序</li>
+</ul>
+<p>我这里就直接照搬了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt; </span><br><span class="line">#include &lt;stdlib.h&gt; </span><br><span class="line">#include &lt;unistd.h&gt; </span><br><span class="line">#include &lt;string.h&gt; </span><br><span class="line">#include &lt;signal.h&gt; </span><br><span class="line"></span><br><span class="line">int vuln(char *str)</span><br><span class="line">&#123;</span><br><span class="line">    int len &#x3D; strlen(str);</span><br><span class="line">    if(str[0] &#x3D;&#x3D; &#39;A&#39; &amp;&amp; len &#x3D;&#x3D; 66)</span><br><span class="line">    &#123;</span><br><span class="line">        raise(SIGSEGV);</span><br><span class="line">        &#x2F;&#x2F;如果输入的字符串的首字符为A并且长度为66，则异常退出</span><br><span class="line">    &#125;</span><br><span class="line">    else if(str[0] &#x3D;&#x3D; &#39;F&#39; &amp;&amp; len &#x3D;&#x3D; 6)</span><br><span class="line">    &#123;</span><br><span class="line">        raise(SIGSEGV);</span><br><span class="line">        &#x2F;&#x2F;如果输入的字符串的首字符为F并且长度为6，则异常退出</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        printf(&quot;it is good!\n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    char buf[100]&#x3D;&#123;0&#125;;</span><br><span class="line">    gets(buf);&#x2F;&#x2F;存在栈溢出漏洞</span><br><span class="line">    printf(buf);&#x2F;&#x2F;存在格式化字符串漏洞</span><br><span class="line">    vuln(buf);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>将这段代码程序命名为hello.c</p>
+<ul>
+<li>用afl-gcc编译<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo afl-gcc -g -o hello hello.c</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>同理 c++ 程序用 afl-g++ 编译</p>
+</blockquote>
+<h4 id="对编译好的文件开始fuzz"><a href="#对编译好的文件开始fuzz" class="headerlink" title="对编译好的文件开始fuzz"></a>对编译好的文件开始fuzz</h4><blockquote>
+<ul>
+<li>对那些可以直接从stdin读取输入的目标程序来说，语法如下：</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ .&#x2F;afl-fuzz -i testcase_dir -o findings_dir &#x2F;path&#x2F;to&#x2F;program […params…]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>对从文件读取输入的目标程序来说，要用“@@”，语法如下：</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ .&#x2F;afl-fuzz -i testcase_dir -o findings_dir &#x2F;path&#x2F;to&#x2F;program @@</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这里采用第一种，首先需要一个测试用例集testcase。输出集会自动生成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">afl-fuzz -i &#x2F;your_path&#x2F;testcase -o &#x2F;your_path&#x2F;fuzz_out_file .&#x2F;hello</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>常见参数及含义</p>
+<ul>
+<li>-f参数表示：testcase的内容会作为afl_test的stdin</li>
+<li>-m参数表示分配的内存空间</li>
+<li>-i 指定测试样本的路径</li>
+<li>-o 指定输出结果的路径</li>
+<li>/dev/null 使错误信息不输出到屏幕</li>
+<li>-t：设置程序运行超时值，单位为 ms</li>
+<li>-M：运行主(Master) Fuzzer</li>
+<li>-S：运行从属(Slave) Fuzzer</li>
+</ul>
+</blockquote>
+<p>在虚拟机上一般会报错，需要根据提示设置一波<code>core_pattern</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line">echo core &gt;&#x2F;proc&#x2F;sys&#x2F;kernel&#x2F;core_pattern</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>再次fuzz，即可出现afl界面<br><img src="https://img-blog.csdnimg.cn/20200505021628723.png?" alt="hello"></p>
+<h4 id="对afl界面的简单分析"><a href="#对afl界面的简单分析" class="headerlink" title="对afl界面的简单分析"></a>对afl界面的简单分析</h4><ul>
+<li><code>process timing</code></li>
+</ul>
+<p>这里展示了当前fuzzer的运行时间、最近一次发现新执行路径的时间、最近一次崩溃的时间、最近一次超时的时间。</p>
+<p>值得注意的是第2项，最近一次发现新路径的时间。如果由于目标二进制文件或者命令行参数出错，那么其执行路径应该是一直不变的，所以如果从fuzzing开始一直没有发现新的执行路径，那么就要考虑是否有二进制或者命令行参数错误的问题了。对于此状况，AFL也会智能地进行提醒</p>
+<ul>
+<li><code>overall results</code></li>
+</ul>
+<p>这里包括运行的总周期数、总路径数、崩溃次数、超时次数。</p>
+<p>其中，总周期数可以用来作为何时停止fuzzing的参考。随着不断地fuzzing，周期数会不断增大，其颜色也会由洋红色，逐步变为黄色、蓝色、绿色。一般来说，当其变为绿色时，代表可执行的内容已经很少了，继续fuzzing下去也不会有什么新的发现了。此时，我们便可以通过Ctrl-C，中止当前的fuzzing</p>
+<ul>
+<li><code>stage progress</code></li>
+</ul>
+<p>这里包括正在测试的fuzzing策略、进度、目标的执行总次数、目标的执行速度</p>
+<p>执行速度可以直观地反映当前跑的快不快，如果速度过慢，比如低于500次每秒，那么测试时间就会变得非常漫长。如果发生了这种情况，那么我们需要进一步调整优化我们的fuzzing</p>
+<p>以上是简单的介绍，如果要看完整的可以查看<a href="https://lcamtuf.coredump.cx/afl/status_screen.txt" target="_blank" rel="noopener">官方文档</a></p>
+<h4 id="分析crash"><a href="#分析crash" class="headerlink" title="分析crash"></a>分析crash</h4><ul>
+<li>打开刚刚创建的fuzz_out文件夹<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;your_path&#x2F;fuzz_out_file</span><br></pre></td></tr></table></figure></li>
+<li>使用xxd分析漏洞<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxd id:******,sig:**    ***********</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+</li>
+</ul>
+<p>这样就完成了第一次对afl的探索，同样我们可以对开源程序进行fuzz<a href>用AFL编译开源软件</a></p>
 
       
     </div>
@@ -228,6 +304,10 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Fuzz/" rel="tag">Fuzz</a></li></ul>
+	</div>
+
       
 
       
@@ -248,7 +328,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/8/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span>
+      <a class="extend prev" rel="prev" href="/page/8/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/10/">Next &amp;raquo;</a>
     </nav>
   
 </div>

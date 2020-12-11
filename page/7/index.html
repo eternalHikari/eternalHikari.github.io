@@ -179,11 +179,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-gcc、make、cmake的区别" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-用AFL编译开源软件" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2020/03/20/gcc%E3%80%81make%E3%80%81cmake%E7%9A%84%E5%8C%BA%E5%88%AB/" class="article-date">
-  	<time datetime="2020-03-20T13:27:40.000Z" itemprop="datePublished">2020-03-20</time>
+      <a href="/2020/04/08/%E7%94%A8AFL%E7%BC%96%E8%AF%91%E5%BC%80%E6%BA%90%E8%BD%AF%E4%BB%B6/" class="article-date">
+  	<time datetime="2020-04-07T18:46:39.000Z" itemprop="datePublished">2020-04-08</time>
 </a>
     </div>
   
@@ -196,8 +196,8 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/20/gcc%E3%80%81make%E3%80%81cmake%E7%9A%84%E5%8C%BA%E5%88%AB/">
-        gcc、make、cmake的区别
+      <a class="article-title" href="/2020/04/08/%E7%94%A8AFL%E7%BC%96%E8%AF%91%E5%BC%80%E6%BA%90%E8%BD%AF%E4%BB%B6/">
+        用AFL编译开源软件
         
       </a>
     </h1>
@@ -208,15 +208,61 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href="https://www.jianshu.com/p/f930e2826a6a" target="_blank" rel="noopener">make和cmake命令的关系和区别</a></p>
-<h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><p>gcc简单的来说，它就是Linux平台的一个编译器，当然，它还有其它的平台。我们可以使用gcc来编译我们的（Ｃ、Ｃ、Ｏbject－C等等），比如我们这里有一个文件，hello_world.c，它是用来在标准输出打印一行”hello world”程序的源代码，这个时候我们就可以使用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc hello_world.c</span><br></pre></td></tr></table></figure>
-<p>便可以生成一个a.out的可执行文件。</p>
-<p>可是，我们的程序有时候可能不是一个单一的源文件，当我们的项目是一个很大的工程时，用gcc命令逐个编译，可能一不小心就会出错。类似于shell脚本，就出现了make工具。</p>
-<h3 id="make"><a href="#make" class="headerlink" title="make"></a>make</h3><p>make工具通过调用makefile文件中的命令便可以对大型程序进行编译，而makefile文件中就包含了调用gcc去编译多个源文件的命令。</p>
-<p>但是，很快又出现了一个问题，如果我们的程序是跨平台的，如果换个平台makefile又要重新修改，这会很麻烦，所以就出现了cmake这个工具，通过cmake我们就可以快速创建出不同平台的makefile文件。</p>
-<h3 id="Cmake"><a href="#Cmake" class="headerlink" title="Cmake"></a>Cmake</h3><p>CMake是一种跨平台编译工具，比make更为高级，使用起来要方便得多。CMake主要是编写CMakeLists.txt文件，然后用cmake命令将CMakeLists.txt文件转化为make所需要的makefile文件，最后用make命令编译源码生成可执行程序或共享库（so(shared object)）</p>
-<p>而Cmake又是根据CMakeLists.txt来生成makefile文件。在编写一个大型程序时，首先编写CMakeLists.txt，然后通过cmake命令就可以生成makefile文件，再通过make命令就可以使用这个makefile文件从而生成可执行文件。</p>
+        <h4 id="写在开头，附上参考链接"><a href="#写在开头，附上参考链接" class="headerlink" title="写在开头，附上参考链接"></a>写在开头，附上参考链接</h4><p><a href="https://blog.csdn.net/abcdyzhang/article/details/53487683" target="_blank" rel="noopener">如何使用AFL进行一次完整的fuzz过程</a></p>
+<ul>
+<li><a href="https://blog.csdn.net/Chen_zju/article/details/80791268" target="_blank" rel="noopener">AFL工具分析</a></li>
+<li><a href="https://paper.seebug.org/496/" target="_blank" rel="noopener">更多细节</a></li>
+<li><a href="https://mp.weixin.qq.com/s?srcid=1014wog8b1xL7UtYWyAagzpB&scene=23&sharer_sharetime=1571047773348&mid=2458299789&sharer_shareid=70adaa3f6eb7c8e6a71f15f9191436d0&sn=04ab934c33bd2bd361aa5c11ad4e0be1&idx=1&__biz=MjM5NTc2MDYxMw%3D%3D&chksm=b1819d0786f614114ea12532b7b73806a2526d4c4191f076d66c3d3518becc9207319c2f69d2&mpshare=1#rd" target="_blank" rel="noopener">对afl_fuzz.c的详细分析</a></li>
+<li><a href="https://bbs.pediy.com/thread-257399.htm" target="_blank" rel="noopener">AFL学习笔记（上）</a></li>
+</ul>
+<p>接上一篇我对AFL的入门实践 <a href="https://eternalhikari.github.io/2020/01/08/AFL%E7%9A%84%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/">AFL的入门学习</a></p>
+<hr>
+<blockquote>
+<p>实验环境</p>
+<p>ubuntu 16.04(虚拟机) 内存分配4gb</p>
+<p>afl 2.52b</p>
+</blockquote>
+<h4 id="以-bento4-为例"><a href="#以-bento4-为例" class="headerlink" title="以 bento4 为例"></a>以 bento4 为例</h4><p>Bento4 is a C++ class library and tools designed to read and write ISO-MP4 files. </p>
+<ul>
+<li><p>下载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo git clone https:&#x2F;&#x2F;github.com&#x2F;axiomatic-systems&#x2F;Bento4</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo unzip Bento4-master.zip</span><br></pre></td></tr></table></figure></li>
+<li><p>新建一个文件夹，并选择编译器</p>
+</li>
+</ul>
+<p>这里虚拟机记得赋予权限sudo，服务器上为root可能不需要</p>
+<blockquote>
+<ul>
+<li>gcc/g++重新编译目标程序的方法是：</li>
+</ul>
+<p>CC=/path/to/afl/afl-gcc ./configure</p>
+<ul>
+<li>对于一个C++程序，要设置:</li>
+</ul>
+<p>CXX=/path/to/afl/afl-g++</p>
+<p>afl-clang和afl-clang++的使用方法类似</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir build</span><br><span class="line">cd build</span><br><span class="line">sudo cmake DCMAKE_CXX_COMPILER&#x3D;afl-g++ ..</span><br></pre></td></tr></table></figure>
+<p>如出现下图则说明编译成功<br><img src="https://img-blog.csdnimg.cn/2020050501275354.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_SGlrYXJp,size_16,color_FFFFFF,t_70" alt="编译开源软件1"></p>
+<ul>
+<li>make编译</li>
+</ul>
+<p>显示下图则说明编译成功，等待片刻即可进行下一步操作<br><img src="https://img-blog.csdnimg.cn/20200505013051796.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_SGlrYXJp,size_16,color_FFFFFF,t_70" alt="编译开源软件2"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200505013353893.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_SGlrYXJp,size_16,color_FFFFFF,t_70" alt="编译开源软件3"><br>此时输入<code>file **</code>即可发现生成的为elf文件</p>
+<ul>
+<li>进行fuzz<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo afl-fuzz -i &#x2F;your&#x2F;tesecase -o &#x2F;your&#x2F;fuzz_out_file .&#x2F;elf_file @@ &#x2F;dev&#x2F;null</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>这里的测试文件(input)后面不要加路径”/“，输出文件可自动生成</li>
+<li>可以加参数 -m <strong>，</strong>的数字即代表使用多少内存来运行 </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200505015538587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_SGlrYXJp,size_16,color_FFFFFF,t_70" alt="编译开源软件4"></p>
+<p>这个时间比较漫长，耐心等待即可(一个空的样例基本需要半个小时)。最好在服务器上跑。</p>
 
       
     </div>
@@ -225,7 +271,7 @@
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Fuzz/" rel="tag">Fuzz</a></li></ul>
 	</div>
 
       
@@ -248,7 +294,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/6/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/8/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/6/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/8/">Next &amp;raquo;</a>
     </nav>
   
 </div>
