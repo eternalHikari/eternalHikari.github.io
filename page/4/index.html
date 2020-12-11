@@ -243,7 +243,7 @@
 <p>一开始是用Android killer反编译，确实很好用。拖进去，点一下，啪的一下就出来了，很快啊。</p>
 <p>初步可以看出<strong>工程信息</strong>是大概的文件信息，<strong>工程管理器</strong>是文件的代码结构，具体可见<a href="https://www.cnblogs.com/bingghost/p/5820256.html" target="_blank" rel="noopener">这篇博客</a>。再加上上面的工具栏，功能就更多了，以后会不断了解的。挖个坑<a href>Android killer使用</a></p>
 <p><img src="/2020/12/05/CVE-2019-6447_ES%E6%96%87%E4%BB%B6%E6%B5%8F%E8%A7%88%E5%99%A8(%E4%B8%8A)/image-20201207162022315.png" alt></p>
-<p>根据参考的文章，可以在工程管理器里找到对应的文件路径，但是点开的却是smali文件，如上图。于是我又不得不去查阅了一下安卓的各种文件格式，具体可以看我另一篇文章<a href>安卓文件格式</a>(先挖个坑自己填)。</p>
+<p>根据参考的文章，可以在工程管理器里找到对应的文件路径，但是点开的却是smali文件，如上图。于是我又不得不去查阅了一下安卓的各种文件格式，具体可以看我另一篇文章<a href="[https://eternalhikari.github.io/2020/12/07/%E5%AE%89%E5%8D%93%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/](https://eternalhikari.github.io/2020/12/07/安卓文件格式/)">安卓文件格式</a>(先挖个坑自己填)。</p>
 <p>在对其他几个版本反编译的时候，出现了<code>AndroidKiller APK 反编译失败</code>的错误提示，在<a href="https://blog.csdn.net/buzul/article/details/108733151" target="_blank" rel="noopener">这篇文章</a>找到了解决方式，其实不需要用到后面一个的方式，在<a href="https://www.bilibili.com/read/cv1785046/" target="_blank" rel="noopener">这篇文章</a>中提到的<code>Debug</code>工具，执行后会在其目录下的<code>/temp</code>路径出现反编译好的文件(下图为执行成功)，直接将dex文件转为jar文件，再用jd-gui就可查看源码</p>
 <p><img src="/2020/12/05/CVE-2019-6447_ES%E6%96%87%E4%BB%B6%E6%B5%8F%E8%A7%88%E5%99%A8(%E4%B8%8A)/image-20201207163541525.png" alt></p>
 <p><strong>关键步骤：dex –&gt; jar</strong></p>
@@ -284,7 +284,7 @@
 <li>adb</li>
 </ul>
 <p>Android Debug Bridge (adb) 是一个android开发人员必会的多功能的调试工具，如它的名字一样，它在开发者和目标机器之间，架起了一座bridge。<a href="http://blog.sina.com.cn/s/blog_4cd5d2bb0101a1bb.html" target="_blank" rel="noopener">参考链接</a></p>
-<p>具体的调用细节及补丁分析需要用到其他工具，将在<a href>下一篇文章</a>中介绍</p>
+<p>具体的调用细节及补丁分析需要用到其他工具，将在<a href="[https://eternalhikari.github.io/2020/12/06/CVE-2019-6447_ES%E6%96%87%E4%BB%B6%E6%B5%8F%E8%A7%88%E5%99%A8(%E4%B8%8B)/](https://eternalhikari.github.io/2020/12/06/CVE-2019-6447_ES文件浏览器(下)/)">下一篇文章</a>中介绍</p>
 <p>参考文章：</p>
 <p><a href="https://www.52pojie.cn/thread-856993-1-1.html" target="_blank" rel="noopener">https://www.52pojie.cn/thread-856993-1-1.html</a></p>
 <p><a href="https://github.com/fs0c131y/ESFileExplorerOpenPortVuln" target="_blank" rel="noopener">https://github.com/fs0c131y/ESFileExplorerOpenPortVuln</a></p>
