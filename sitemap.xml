@@ -88,6 +88,13 @@
 
   
   <url>
+    <loc>https://eternalhikari.github.io/tags/Fuzzing/</loc>
+    <lastmod>2020-12-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://eternalhikari.github.io/tags/CVE/</loc>
     <lastmod>2020-12-23</lastmod>
     <changefreq>daily</changefreq>
@@ -96,13 +103,6 @@
   
   <url>
     <loc>https://eternalhikari.github.io/tags/Android/</loc>
-    <lastmod>2020-12-23</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://eternalhikari.github.io/tags/Fuzzing/</loc>
     <lastmod>2020-12-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
