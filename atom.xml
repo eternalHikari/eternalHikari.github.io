@@ -142,9 +142,9 @@
     
     <category term="Fuzzing" scheme="https://eternalhikari.github.io/tags/Fuzzing/"/>
     
-    <category term="Chrome V8" scheme="https://eternalhikari.github.io/tags/Chrome-V8/"/>
-    
     <category term="浏览器" scheme="https://eternalhikari.github.io/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/"/>
+    
+    <category term="Chrome V8" scheme="https://eternalhikari.github.io/tags/Chrome-V8/"/>
     
   </entry>
   
