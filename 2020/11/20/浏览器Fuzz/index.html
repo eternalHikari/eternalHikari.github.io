@@ -1,0 +1,622 @@
+
+
+<!DOCTYPE html>
+<html lang="cn" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Hikari">
+  <meta name="keywords" content="">
+  <title>浏览器Fuzz - Hikari&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"eternalhikari.github.io","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/atom.xml" title="Hikari's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="浏览器Fuzz">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-11-20 14:27" pubdate>
+        November 20, 2020 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.3k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      35
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">浏览器Fuzz</h1>
+            
+            <div class="markdown-body">
+              <h2 id="浏览器fuzz"><a href="#浏览器fuzz" class="headerlink" title="浏览器fuzz"></a>浏览器fuzz</h2><h3 id="一、浏览器部分"><a href="#一、浏览器部分" class="headerlink" title="一、浏览器部分"></a>一、浏览器部分</h3><h4 id="1-1-浏览器结构"><a href="#1-1-浏览器结构" class="headerlink" title="1.1 浏览器结构"></a>1.1 浏览器结构</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201106154532115.png" srcset="/img/loading.gif"></p>
+<p>浏览器一般包括DOM引擎、CSS解释器、脚本引擎、渲染引擎、协议支持、媒体流支持、三方库、数据存储、用户界面等几个部分。</p>
+<ul>
+<li><p>用户界面</p>
+<p>与用户交互、接受用户操作、展现浏览器当前状态。包括地址栏、前进/后退按钮、书签菜单等。</p>
+</li>
+<li><p>浏览器引擎</p>
+<p>是一个可嵌入的组件，提供了查询和操作渲染引擎的高层接口(加载、刷新、后退、错误信息等)，使渲染引擎平台无关， 提高可移植性</p>
+</li>
+<li><p>渲染引擎</p>
+<p>浏览器的核心部分。解析HTML文档和CSS描述；依据CSS，完成HTML布局。渲染引擎根据元素与样式信息，计算大小、位置、布局，渲染解析后的内容。</p>
+</li>
+<li><p>网络</p>
+<p>提供网络相关的功能，如协议解析、网络I/O等。浏览器支持的协议通常包括HTTP、FTP、WebSocket、HTTP/2、QUIC、DNS、mDNS、WebRTC等。浏览器支持的媒体流通常包括JPG、GIF、PNG、WebM、Ogg、AAC、MP3、MP4、FLAC等。</p>
+</li>
+<li><p>JavaScript解释器</p>
+<p>解析并执行JavaScript代码，结果返回给渲染引擎</p>
+</li>
+<li><p>XML解析器</p>
+<p>解析XML文档</p>
+</li>
+<li><p>用户界面后端</p>
+<p>提供绘制、窗口原语和字体等</p>
+</li>
+<li><p>数据存储</p>
+<p>存储书签、Cookie、 缓存等各种数据到硬盘上</p>
+</li>
+</ul>
+<h4 id="1-2-渲染引擎"><a href="#1-2-渲染引擎" class="headerlink" title="1.2 渲染引擎"></a>1.2 渲染引擎</h4><p><strong>这是浏览器的核心部分，渲染引擎解析 HTML 文档，并将各标记逐个转化成 DOM 节点。同时也会解析外部 CSS 文件以及样式元素中的样式数据，完成HTML布局。</strong></p>
+<ul>
+<li><p>CSS解释器</p>
+<p>解析CSS，为DOM中的各个元素计算样式信息。</p>
+</li>
+<li><p>脚本引擎</p>
+<p>包括JavaScript、VBScript、asm.js、WebAssembly等解释器，对脚本进行解释执行，并对DOM、CSS进行修改。</p>
+</li>
+<li><p>DOM是文档对象模型(Document Object Model)的缩写，标准由 W3C 组织指定。</p>
+<p>DOM树是把 HTML 文档呈现为带有元素、属性和文本的树结构。DOM引擎解析HTML、XML、SVG、MathML、XUL等内容。</p>
+</li>
+<li><p>Render树</p>
+<p>包含若干带有颜色、面积等可视化属性的矩形。也就是我们学前端时的各个div的布局(从左往右、从上到下)</p>
+</li>
+</ul>
+<p><strong>渲染过程</strong></p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120114715656.png" srcset="/img/loading.gif"></p>
+<p><strong>DOM树fuzz的流程图</strong></p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120123419951.png" srcset="/img/loading.gif"></p>
+<h4 id="1-3-JS引擎"><a href="#1-3-JS引擎" class="headerlink" title="1.3 JS引擎"></a>1.3 JS引擎</h4><p>JavaScript引擎是一个专门处理JavaScript脚本的虚拟机，一般会附带在网页浏览器之中。</p>
+<p><strong>JS引擎分类</strong></p>
+<ul>
+<li>V8 (Chrome)</li>
+<li>SpiderMonkey (FireFox)</li>
+<li>ChakraCore (Edge)</li>
+<li>JavaScriptCore (Safari)</li>
+</ul>
+<p><strong>执行流程</strong></p>
+<ul>
+<li>JavaScript源代码被Parser解析成AST</li>
+<li>AST经Interpreter解析成Bytecode后执行</li>
+<li>不断执行Bytecode，收集运行时信息，生成优化后的Bytecode</li>
+</ul>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120123536971.png" srcset="/img/loading.gif"></p>
+<p><strong>对上图的解释</strong></p>
+<ul>
+<li>Parser:脚本执行的入口点，通常发出自定义bytecode</li>
+<li>Bytecode然后由解释器或JIT编译器解释编译</li>
+<li>执行代码与运行时交互，运行时定义各种数据结构的表示，提供内建函数和对象等等</li>
+<li>回收内存所需的垃圾收集器</li>
+</ul>
+<p>JIT编译器的流程</p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120133428453.png" srcset="/img/loading.gif"></p>
+<p>JS是脚本语言，每次执行前会先编译再执行。当系统识别这一块代码经常出现时，就定义为hot code，直接运行编译好的二进制代码。</p>
+<p>具体可以参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/99395691?tdsourcetag=s_pcqq_aiomsg">JavaScript 编译 - JIT (just-in-time) compiler 是怎么工作的</a></p>
+<p><strong>下图为parser先生成抽象语法树(AST)，再由全代码生成汇编语言，箭头指向调用runtime</strong></p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120123952322.png" srcset="/img/loading.gif"></p>
+<h4 id="1-4-WebAssembly"><a href="#1-4-WebAssembly" class="headerlink" title="1.4 WebAssembly"></a>1.4 WebAssembly</h4><p>WebAssembly是在Web中引入的低级语言，其目的和Asm.js类似，也是要支持本地代码的运行从而获得媲美原生应用的高性能。</p>
+<p>它是一种二进制语言，但是无法直接在处理器上运行。在运行时，代码被编译为中间字节代码，可以在浏览器内快速转换为机器代码，然后比传统JavaScript更有效地执行。</p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120124235569.png" srcset="/img/loading.gif"></p>
+<p>Wasm的设计从如下几个方面考虑来保证Wasm的安全性</p>
+<ul>
+<li>保护用户免受由于无意的错误而导致漏洞的应用程序的侵害</li>
+<li>保护用户免受故意编写为恶意的应用程序的侵害</li>
+<li>为开发人员提供良好的缓解措施</li>
+</ul>
+<p>具体的安全措施有</p>
+<ul>
+<li>Wasm应用程序在沙箱内运行</li>
+<li>Wasm无法对任意地址进行函数调用。Wasm采用对函数进行编号的方式，编号存储在函数表中</li>
+<li>间接函数调用受类型签名检查的约束</li>
+<li>调用堆栈受到保护，这意味着无法覆盖返回指针</li>
+<li>实现了控制流完整性，这意味着调用意外的函数将失败</li>
+</ul>
+<h3 id="二、Fuzz部分"><a href="#二、Fuzz部分" class="headerlink" title="二、Fuzz部分"></a>二、Fuzz部分</h3><p>Fuzz又称模糊测试，是一种侧重于发现软件安全漏洞的方法。</p>
+<p>Fuzz是通过构造非预期的输入数据并监控目标软件在运行过程中的异常结果来发现软件故障。</p>
+<h4 id="2-1-核心功能"><a href="#2-1-核心功能" class="headerlink" title="2.1 核心功能"></a>2.1 核心功能</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201112202145078.png" srcset="/img/loading.gif"></p>
+<h4 id="2-2-基本流程"><a href="#2-2-基本流程" class="headerlink" title="2.2 基本流程"></a>2.2 基本流程</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201112202215878.png" srcset="/img/loading.gif"></p>
+<h4 id="2-3-fuzz分类"><a href="#2-3-fuzz分类" class="headerlink" title="2.3 fuzz分类"></a>2.3 fuzz分类</h4><p>根据fuzz对象可以分为</p>
+<ul>
+<li><p>白盒模糊测试</p>
+</li>
+<li><p>黑盒模糊测试</p>
+</li>
+<li><p>灰盒模糊测试</p>
+</li>
+</ul>
+<p>根据模糊测试的研究类型可分为</p>
+<ul>
+<li>基于变异的fuzz</li>
+<li>基于生成的fuzz</li>
+</ul>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120130629044.png" srcset="/img/loading.gif"></p>
+<h3 id="三、浏览器fuzz"><a href="#三、浏览器fuzz" class="headerlink" title="三、浏览器fuzz"></a>三、浏览器fuzz</h3><h4 id="3-1-如何进行浏览器fuzz-我们需要关心什么"><a href="#3-1-如何进行浏览器fuzz-我们需要关心什么" class="headerlink" title="3.1 如何进行浏览器fuzz(我们需要关心什么)"></a>3.1 如何进行浏览器fuzz(我们需要关心什么)</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120130821904.png" srcset="/img/loading.gif"></p>
+<p><strong>主要关心的问题</strong>：如何输入、如何有效输入、可fuzz的地方有哪些</p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120131021057.png" srcset="/img/loading.gif"></p>
+<p>以一个例子为例，可知一个通用的方法：</p>
+<ul>
+<li>通过调用接口获取信息</li>
+<li>由参数类型构造数据</li>
+<li>使用监视器监视</li>
+</ul>
+<p>如何构造是个问题</p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120131755791.png" srcset="/img/loading.gif"></p>
+<p>这部分与上述提到的JIT编译器有关。既可以输入js源代码，也可以输入bytecode</p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120131814384.png" srcset="/img/loading.gif"></p>
+<p>在fuzz中，测试集是很重要的。因为后续的变异是基于初试testcase变异的。</p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120135609995.png" srcset="/img/loading.gif"></p>
+<p>这里补充一下fuzz常见的基于的规格：<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/197678.html">可以戳这里看第五大点</a></p>
+<ul>
+<li>基于块</li>
+</ul>
+<p>将程序拖入ida会分成一块一块的代码，这些代码会从上到下依次执行，当遇到转移/跳转指令之后到下一个代码块</p>
+<ul>
+<li>基于边</li>
+</ul>
+<p>代码块与块之间的跳转</p>
+<ul>
+<li>基于元组</li>
+</ul>
+<p>基于两个块和中间的边，可以记录前后块的信息，包含一定的前后文的情况</p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120135812935.png" srcset="/img/loading.gif"></p>
+<p>基于文法同样可以获得很多满足结构的语法片段。例如1+2+3可以分为(1+2)+3和1+(2+3)，抽象语法树一般有多个满足语法条件的形式。这种方式同样可以生成规模很大的测试集</p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120142001479.png" srcset="/img/loading.gif"></p>
+<h4 id="3-2-对浏览器fuzz的分类"><a href="#3-2-对浏览器fuzz的分类" class="headerlink" title="3.2 对浏览器fuzz的分类"></a>3.2 对浏览器fuzz的分类</h4><h5 id="3-2-1-按功能分"><a href="#3-2-1-按功能分" class="headerlink" title="3.2.1 按功能分"></a>3.2.1 按功能分</h5><p>在浏览器中，Fuzz框架要实现的主要功能是随机样本的生成、浏览器进程监控、Crash样本保存。而各个框架则在完成基本功能的基础上实现分布式调度、自定义fuzz策略、样本精简、分析crash等特性。</p>
+<p>如果要分类的话，浏览器fuzz工具大概可以分为框架类、策略类以及综合类。策略类工具制定了一系列新建、修改、删除DOM元素的规则。通过生成随机样本的方式，产生不同的样本来测试浏览器是否产生异常。而框架类工具则是提供了启动并监控浏览器进程、打开或记录异常样本等功能，将策略类工具承载起来的Fuzzing平台。</p>
+<ul>
+<li><p>框架类比较有代表性的是BFuzzer、grinder、cross_fuzz、x-fuzzer等，这类工具提供了fuzz的基本功能，但是没有涉及样本生成的策略。</p>
+</li>
+<li><p>策略类工具中比较有代表性的是nduja和fileja[3-5]，这两个工具是由Valotta完成的浏览器fuzz样本生成脚本，有着比较丰富的生成规则，但是并没有实现自动化的测试等功能。</p>
+</li>
+<li><p>综合类则综合了两类的特点，完成了两种功能，比较有代表性的是clusterfuzz、funfuzz、chromefuzzer、ajaxdemolisher、lithium等。</p>
+</li>
+</ul>
+<p>这些工具基本都通过javascript脚本进行fuzz操作，同时通过hook函数、localStorage本地存储等技术手段动态记录fuzz操作日志，捕获到异常后再根据记录日志进行还原。</p>
+<h5 id="3-2-2-按攻击面分类"><a href="#3-2-2-按攻击面分类" class="headerlink" title="3.2.2 按攻击面分类"></a>3.2.2 按攻击面分类</h5><p>另外一种分类的思路是按攻击面分类，常见的fuzzer都是针对DOM进行fuzz，但是也有一些fuzz工具专注于其他的攻击面。比如针对ActiveX进行fuzz的axman，另外也有一些针对JavaScript脚本、CSS、PDF、SVG、Flash、浏览器扩展、插件等进行fuzz的工具。</p>
+<h5 id="3-2-3-随机样本的生成"><a href="#3-2-3-随机样本的生成" class="headerlink" title="3.2.3 随机样本的生成"></a>3.2.3 随机样本的生成</h5><p>随机样本生成的好坏，直接决定了该工具能否挖掘出有价值的漏洞。目前纯Fuzz方法中，比较流行的就是<strong>根据目标文件格式生成</strong>针对性样本，效果也比较理想。以HTML文档为例，诞生过很多随机生成HTML/DOM元素的Browser Fuzzer。</p>
+<p>曾经盛名一时的nduja，其大致思路就是，利用JavaScript随机创建DOM元素、随机调用DOM处理函数、随机删除DOM元素等操作来完成每一次Fuzz的。</p>
+<h4 id="3-3-样本保存"><a href="#3-3-样本保存" class="headerlink" title="3.3 样本保存"></a>3.3 样本保存</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120141743643.png" srcset="/img/loading.gif"></p>
+<p>附上一张从bytecode到插桩的流程图</p>
+<h5 id="3-3-1-记录随机数"><a href="#3-3-1-记录随机数" class="headerlink" title="3.3.1 记录随机数"></a>3.3.1 记录随机数</h5><p>结合之前提到的创建DOM元素的方式，一种思路是将本次rand函数生成的所有随机数全部保存下来即可。Grinder框架就是基于这种思路，采用DLL注入的方式，劫持了JavaScript的parseFloat函数，用以记录某次样本需要记录的相关参数。</p>
+<p>但是这样有几个缺点，一个是浏览器最新版本一般不提供symbols文件或发布symbols文件比较慢，这无疑限制了Grinder对最新浏览器的测试能力。另外一个是有时候可能是多个HTML共同导致了某个Crash，但是Grinder的日志只记录了一个HTML中的log信息，可能无法重现该类漏洞。</p>
+<h5 id="3-3-2-记录随机样本"><a href="#3-3-2-记录随机样本" class="headerlink" title="3.3.2 记录随机样本"></a>3.3.2 记录随机样本</h5><p>既然记录随机值的方式存在一定的问题，那么就有了另一个思路，直接将模版中的随机元素生成后进行保存，然后浏览器再访问。这样就简化了从日志中恢复样本的流程，而且更为准确。</p>
+<h5 id="3-3-3-WebSocket通信"><a href="#3-3-3-WebSocket通信" class="headerlink" title="3.3.3 WebSocket通信"></a>3.3.3 WebSocket通信</h5><p>另一个方法是利用websocket，实时的把相关信息发送到服务器，在服务器端进行保存。但是这样也有一个缺点，运行的websocket相关脚本可能也会影响浏览器样本的fuzz情况。</p>
+<h5 id="3-4-4-其他样本生成方式"><a href="#3-4-4-其他样本生成方式" class="headerlink" title="3.4.4 其他样本生成方式"></a>3.4.4 其他样本生成方式</h5><p>另外一种方式是根据已有的HTML样本进行变换之后生成。 样本可以来源于之前的0day，从网上获取的一些样本。 样本构造尽可能多的覆盖HTML的属性，比如css/javascript等</p>
+<h4 id="3-4-浏览器进程监控"><a href="#3-4-浏览器进程监控" class="headerlink" title="3.4 浏览器进程监控"></a>3.4 浏览器进程监控</h4><p>在对浏览器的异常检测上，通常有Pydbg和Windbg等方式，这些方式都各有优劣。但pydbg对python3和x64系统软件支持都不是特别好，另外windbg具有很吸引人的!exploitable插件[2-7]，虽然某些时候给出的结论并不准确，但不失为一种对漏洞可利用性做出预判的方法。</p>
+<p>另一个方法是，在Windows下某个进程崩溃时，通常会弹出WerFault.exe异常提示,可以根据进程列表中有无WerFault.exe作为监控浏览器是否发生Crash的依据。另外，将Windbg的命令行版cdb.exe设置为默认即时调试器。当发生crash时自动调用该调试器，并做下记录，也是一个可行的方法。</p>
+<h4 id="3-5-浏览器fuzz缺点"><a href="#3-5-浏览器fuzz缺点" class="headerlink" title="3.5 浏览器fuzz缺点"></a>3.5 浏览器fuzz缺点</h4><p>很多浏览器fuzz工具每运行一个测试用例都会重启待测浏览器进程，因为浏览器重启在运行一个测试用例过程中耗时占比较大，进而导致fuzz效率不高。</p>
+<h4 id="3-6-别的思考"><a href="#3-6-别的思考" class="headerlink" title="3.6 别的思考"></a>3.6 别的思考</h4><p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120141854144.png" srcset="/img/loading.gif"></p>
+<p>这里需要说一下JS竟用条件<br><strong>所有现代浏览器都使用一条OS线程来实现JS脚本引擎。</strong><br>唯一的例外是web workers,但它不会访问DOM，相对安全风险较小。</p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120142145127.png" srcset="/img/loading.gif"></p>
+<p>由于大部分事件是异步处理的，所以很有可能同一事件内不同部件的内存内容不同，这极易引发安全问题。</p>
+<p>附上V8编译概览</p>
+<p><img src="/2020/11/20/%E6%B5%8F%E8%A7%88%E5%99%A8Fuzz/image-20201120142332917.png" srcset="/img/loading.gif"></p>
+<blockquote>
+<p>这篇文章是我在web安全大作业的一部分，刘老师真的很赞</p>
+<p>文中截取了一些霍玮老师、刘奇旭老师课件上的图片(说明俺听了2333</p>
+<p>文章也引用了很多交大大佬<a target="_blank" rel="noopener" href="https://github.com/LyleMi/Browser-Fuzz-Summarize">LyleMi</a>已经总结好的内容，了解到了许多细节</p>
+<p>感谢队友，尤其是plusls，orz</p>
+<p>在整理过程中，我看了很多相关论文和v8的资料，每一个地方都有太多要学的地方了。v8的内容之后估计还会写到，本文以能解释清楚浏览器fuzz的目的来写，所以v8的部分不是很清楚，以后会结合着真实案例来写。</p>
+<p>如果有什么问题，师傅可以点击[联系我](<a href="mailto:yagami1230@outlook.com">Email</a>)发邮件</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Fuzzing/">Fuzzing</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Chrome-V8/">Chrome V8</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/12/01/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%97%B6%E5%BA%8F%E5%9B%BE&amp;%E5%8F%82%E8%80%83%E6%9E%B6%E6%9E%84/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">浏览器时序图&参考架构</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/04/08/%E7%94%A8AFL%E7%BC%96%E8%AF%91%E5%BC%80%E6%BA%90%E8%BD%AF%E4%BB%B6/">
+                        <span class="hidden-mobile">用AFL编译开源软件</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

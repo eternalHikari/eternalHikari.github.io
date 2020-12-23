@@ -1,62 +1,102 @@
-/**
- * created by lvfan
- * 2018-09-04
- */
+/* global Fluid, Debouncer */
 
-/**
- * @description 获取实时时间，写入 id 为 now-time 的标签中
- */
-(function () {
-    const divTime = document.getElementById('now-time');
+Fluid.utils = {
 
-    function getTime() {
-        let time = new Date();
-        let hour = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
-        let minute = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
-        let second = time.getSeconds() < 10 ? '0' + time.getSeconds() : time.getSeconds();
-        divTime.innerText = hour + ':' + minute + ':' + second;
+  listenScroll: function(callback) {
+    const dbc = new Debouncer(callback);
+    window.addEventListener('scroll', dbc, false);
+    dbc.handleEvent();
+  },
+
+  scrollToElement: function(target, offset) {
+    var of = $(target).offset();
+    if (of) {
+      $('html,body').animate({
+        scrollTop: of.top + (offset || 0),
+        easing   : 'swing'
+      });
     }
+  },
 
-    getTime();
-    setInterval(function () {
-        getTime();
-    }, 1000);
-}());
-
-/**
- * @description 判断当前页面是否为活动页
- */
-(function () {
-    // 网页当前状态判断
-    let state, visibilityChange, status, doc = document;
-    if (typeof document.hidden !== 'undefined') {
-        visibilityChange = 'visibilitychange';
-        state = 'visibilityState';
-    } else if (typeof document.mozHidden !== 'undefined') {
-        visibilityChange = 'mozvisibilitychange';
-        state = 'mozVisibilityState';
-    } else if (typeof document.msHidden !== 'undefined') {
-        visibilityChange = 'msvisibilitychange';
-        state = 'msVisibilityState';
-    } else if (typeof document.webkitHidden !== 'undefined') {
-        visibilityChange = 'webkitvisibilitychange';
-        state = 'webkitVisibilityState';
-    }
-    let docText = doc.title;
-    // 添加监听器，在title里显示状态变化
-    doc.addEventListener(visibilityChange, function () {
-        if (doc[state] === 'visible') {
-            doc.title = '欢迎回来！d(`･∀･)b 👏';
-            status = setTimeout(() => {
-                doc.title = docText;
-            }, 1000);
-        } else {
-            doc.title = '藏起来了d(`x_x)b';
-            if (status) {
-                clearTimeout(status);
-            }
+  waitElementVisible: function(targetId, callback) {
+    var runningOnBrowser = typeof window !== 'undefined';
+    var isBot = (runningOnBrowser && !('onscroll' in window)) || (typeof navigator !== 'undefined'
+    && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent));
+    var supportsIntersectionObserver = runningOnBrowser && 'IntersectionObserver' in window;
+    if (!isBot && supportsIntersectionObserver) {
+      var io = new IntersectionObserver(function(entries, ob) {
+        if (entries[0].isIntersecting) {
+          callback && callback();
+          ob.disconnect();
         }
-    }, false);
-    // 初始化页面状态
-    // doc.title = '吕钒的后花园';
-}());
+      }, {
+        threshold : [0],
+        rootMargin: (window.innerHeight || document.documentElement.clientHeight) + 'px'
+      });
+      io.observe(document.getElementById(targetId));
+    } else {
+      callback && callback();
+    }
+  },
+
+  waitElementLoaded: function(targetId, callback) {
+    var runningOnBrowser = typeof window !== 'undefined';
+    var isBot = (runningOnBrowser && !('onscroll' in window)) || (typeof navigator !== 'undefined'
+    && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent));
+    if (!runningOnBrowser || isBot) {
+      return;
+    }
+
+    if ('MutationObserver' in window) {
+      var mo = new MutationObserver(function(records, ob) {
+        var ele = document.getElementById(targetId);
+        if (ele) {
+          callback && callback();
+          ob.disconnect();
+        }
+      });
+      mo.observe(document, { childList: true, subtree: true });
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        callback && callback();
+      });
+    }
+  },
+
+  createScript: function(url, onload) {
+    var s = document.createElement('script');
+    s.setAttribute('src', url);
+    s.setAttribute('type', 'text/javascript');
+    s.setAttribute('charset', 'UTF-8');
+    s.async = false;
+    if (typeof onload === 'function') {
+      if (window.attachEvent) {
+        s.onreadystatechange = function() {
+          var e = s.readyState;
+          if (e === 'loaded' || e === 'complete') {
+            s.onreadystatechange = null;
+            onload();
+          }
+        };
+      } else {
+        s.onload = onload;
+      }
+    }
+    var e = document.getElementsByTagName('script')[0]
+    || document.getElementsByTagName('head')[0]
+    || document.head || document.documentElement;
+    e.parentNode.insertBefore(s, e);
+  },
+
+  createCssLink: function(url) {
+    var l = document.createElement('link');
+    l.setAttribute('rel', 'stylesheet');
+    l.setAttribute('type', 'text/css');
+    l.setAttribute('href', url);
+    var e = document.getElementsByTagName('link')[0]
+    || document.getElementsByTagName('head')[0]
+    || document.head || document.documentElement;
+    e.parentNode.insertBefore(l, e);
+  }
+
+};
