@@ -71,7 +71,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
-                首页
+                Home
               </a>
             </li>
           
@@ -83,7 +83,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
-                归档
+                Archives
               </a>
             </li>
           
@@ -95,7 +95,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
-                分类
+                Categories
               </a>
             </li>
           
@@ -107,7 +107,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
-                标签
+                Tags
               </a>
             </li>
           
@@ -119,7 +119,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
-                关于
+                About
               </a>
             </li>
           
@@ -205,6 +205,52 @@
           </div>
         
         
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/07/18/Windows%E5%AE%89%E5%85%A8%E4%BA%8B%E4%BB%B6ID/">Windows安全事件ID</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/07/18/Windows%E5%AE%89%E5%85%A8%E4%BA%8B%E4%BB%B6ID/">
+          
+          
+            
+          
+          审计帐户登录事件123454776 – 域控制器试图验证帐户凭证信息4777 – 域控制器未能验证帐户凭证信息4768 – 要求有Kerberos验证票(TGT)4769 – 要求有Kerberos验证票(TGT)4770 – Kerberos服务票被更新
+
+
+审计帐户管理1234567891011121314151617181920212223242526272829303132334741 –
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-07-18 22:54" pubdate>
+              2021-07-18
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%97%A5%E5%BF%97/">日志</a>
+            
+              <a href="/tags/%E5%86%85%E7%BD%91/">内网</a>
+            
+          </div>
         
       </div>
     </article>
@@ -600,42 +646,19 @@ AFL是什么AFL（American Fuzzy Lop）是由安全研究员Michał Zalewski开�
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/01/05/hello-world/">Hello World</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/01/05/hello-world/">
-          
-          
-            
-          
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-01-05 13:24" pubdate>
-              2020-01-05
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
 
 
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
+      ele.href += '#board';
+    }
+  </script>
 
 
 
@@ -658,7 +681,7 @@ Quick
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -667,7 +690,7 @@ Quick
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
           <label data-error="x" data-success="v"
-                 for="local-search-input">关键词</label>
+                 for="local-search-input">keyword</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
